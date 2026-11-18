@@ -1,0 +1,67 @@
+/* ---------- Floating math background ---------- */
+
+/* Sits behind the calculator, ignores clicks */
+.math-bg {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+    /* soft glow so the background isn't flat */
+    background:
+        radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.55), transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(150, 180, 235, 0.45), transparent 50%);
+}
+
+.math-item {
+    position: absolute;
+    bottom: -15vh;
+    left: var(--x, 50%);
+    font-family: "Cambria Math", "STIX Two Math", "Times New Roman", serif;
+    font-style: italic;
+    font-size: var(--size, 32px);
+    color: var(--color, rgba(70, 110, 185, 1));
+    filter: blur(var(--blur, 0px));
+    white-space: nowrap;
+    user-select: none;
+    will-change: transform, opacity;
+    animation: math-float var(--dur, 20s) linear infinite;
+    animation-delay: var(--delay, 0s);
+}
+
+@keyframes math-float {
+    0% {
+        transform: translate3d(0, 0, 0) rotate(var(--rot-a, -10deg));
+        opacity: 0;
+    }
+    12% {
+        opacity: var(--alpha, 0.3);
+    }
+    50% {
+        transform: translate3d(calc(var(--drift, 60px) * -0.6), -65vh, 0) rotate(calc((var(--rot-a, -10deg) + var(--rot-b, 10deg)) / 2));
+    }
+    88% {
+        opacity: var(--alpha, 0.3);
+    }
+    100% {
+        transform: translate3d(var(--drift, 60px), -130vh, 0) rotate(var(--rot-b, 10deg));
+        opacity: 0;
+    }
+}
+
+/* Calculator stays above the background */
+.main-container {
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 20px 60px rgba(60, 90, 160, 0.25);
+}
+
+/* Respect people who turn animations off */
+@media (prefers-reduced-motion: reduce) {
+    .math-item {
+        animation: none;
+        bottom: auto;
+        top: var(--y, 50%);
+        opacity: var(--alpha, 0.3);
+    }
+}
